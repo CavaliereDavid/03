@@ -36,6 +36,8 @@ import {
   getDiscountedPrice,
   getFinalPrice,
   getVatAmount,
+  getDiscountedPrice,
+  getTransportFee,
 } from './cart-utils.js';
 import { createElement } from './utils.js';
 
@@ -77,6 +79,7 @@ const container = document.querySelector('#items-list');
 
 cart.forEach((item) => {
   appendCartItem(item, vat, container);
+
 });
 
 function(updateSummary(items, vat){
@@ -91,4 +94,24 @@ function(updateSummary(items, vat){
     return total + vatAmount;
   }, 0);
   )
-  }
+}
+  // questa volta parto da un oggetto
+
+function updateSummary2(items, vat) {
+  let summary = items.reduce((summ, item){
+    
+    let getDiscountedPrice = getDiscountedPrice(item.netPrice, vat);
+    const vatAmount = getVatAmount(discountedPrice, vat);
+    const weight = item.weight * item.quantity;
+    const price = getFinalPrice(discountedPrice, vat);
+
+    return {
+      netTotal: summ.netTotal + discountedPrice,
+      totalVat: summ.totalVat + vatAmount ,
+      totalWeight: summ.totalWeight + weight,
+      totalPrice: summ.totalPrice + price
+    }
+  }, { netTotal: 0, totalVat: 0, totalWeight: 0, totalPrice: 0 });
+}
+  
+const transportFee = getTransportFee(summary.totalWeight);
