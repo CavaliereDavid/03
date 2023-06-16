@@ -100,7 +100,7 @@ function(updateSummary(items, vat){
 function updateSummary2(items, vat) {
   let summary = items.reduce((summ, item){
     
-    let getDiscountedPrice = getDiscountedPrice(item.netPrice, vat);
+    let getDiscountedPrice = getDiscountedPrice(item.netPrice, item.discount) * item.quantity;
     const vatAmount = getVatAmount(discountedPrice, vat);
     const weight = item.weight * item.quantity;
     const price = getFinalPrice(discountedPrice, vat);
